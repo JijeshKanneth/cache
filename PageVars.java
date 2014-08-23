@@ -11,7 +11,7 @@ public class PageVars extends ObjectBuilder{
 	private PageVars(){}
 	public static PageVars get(PageContext page){
 		PageVars temp = (PageVars) page.getSession().getAttribute("_page_vars");
-		if(temp == null){
+		if(null == temp){
 			temp = new PageVars();
 			temp.pageClass = page.getPage().getClass().getCanonicalName();
 			page.getSession().setAttribute("_page_vars", temp);
