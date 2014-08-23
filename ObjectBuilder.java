@@ -19,18 +19,18 @@ public class ObjectBuilder {
 	public Object getInstanceOf(Class className, Object [] params){
 		String classID = getClassID(className, params);
 		Object object = table.get(classID);
-		if(object == null){
+		if(null == object){
 			try {
-				if(params == null || params.length == 0){
+				if(null == params || 0 == params.length){
 					object = className.newInstance();
 				}else{
 					Constructor cons = findConstructor(className, params);
-					if(cons != null) object = cons.newInstance(params);
+					if(null != cons) object = cons.newInstance(params);
 				}
-				if(object != null) table.put(classID, object);
-			} catch (InstantiationException e) {
-				System.out.println("Instantiation Exception ");
-			} catch (IllegalAccessException e) {
+				if(null != object) table.put(classID, object);
+			} catch (InstantiationException ie) {
+				System.out.println("Instantiation Exception "+ie.getMessage());
+			} catch (IllegalAccessException iae) {
 				System.out.println("Illegal Access Exception ");
 			} catch (IllegalArgumentException e) {
 			} catch (InvocationTargetException e) {
@@ -43,7 +43,7 @@ public class ObjectBuilder {
 	private String getClassID(Class className, Object[] params) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(className.getCanonicalName());
-		if(params != null){
+		if(null != params){
 			for(int i = 0; i < params.length; i++){
 				sb.append(params[i].hashCode());
 			}
@@ -73,7 +73,7 @@ public class ObjectBuilder {
 		StringBuffer sb = new StringBuffer();
 		sb.append(_class.getCanonicalName());
 		sb.append(method);
-		if(params != null){
+		if(null != params){
 			for(int i = 0; i < params.length; i++){
 				sb.append(params[i].hashCode());
 			}
@@ -87,29 +87,38 @@ public class ObjectBuilder {
 	}
 	
 	public Object call(Object obj,String methodName, Object [] params){
+		if(null == obj) return null;
 		Class className = obj.getClass();
 		String methodID = getMethodID(className, methodName, params);
 		Object object = table.get(methodID);
-		if(object == null){
+		if(null == object){
 			Method meth = findMethod(methodName,params,className);
-			if(meth != null){
-				 try {
+			if(null != meth){
+				try {
 					object = meth.invoke(obj, params);
 				} catch (IllegalAccessException e) {
 				} catch (IllegalArgumentException e) {
 				} catch (InvocationTargetException e) {
 				}
 			}
-			if(object != null) table.put(methodID, object);
+			if(null != object) table.put(methodID, object);
 		}
 		return object;
+	}
+	
+	public Object call(Class _class, String methodName,Object [] params){
+		return call(getInstanceOf(_class), methodName, params);
+	}
+	
+	public Object call(Class _class, String methodName){
+		return call(getInstanceOf(_class), methodName);
 	}
 	
 	private Method findMethod(String method, Object[] params, Class className) {
 		Method [] meths = className.getMethods();
 		for(Method meth : meths){
 			if(StringUtils.equals(meth.getName(), method)){
-				if(params == null || params.length == 0) return meth;
+				if(null == params || 0 == params.length) return meth;
 				Class [] args = meth.getParameterTypes();
 				int noOfArgs = args.length;
 				if(noOfArgs == params.length){
