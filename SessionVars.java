@@ -14,7 +14,7 @@ public class SessionVars extends ObjectBuilder{
 	
 	public static SessionVars get(HttpSession session){
 		SessionVars temp = (SessionVars) session.getAttribute("_session_vars");
-		if(temp == null){
+		if(null == temp){
 			temp = new SessionVars();
 			session.setAttribute("_session_vars", temp);
 		}
