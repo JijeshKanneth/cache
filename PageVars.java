@@ -1,7 +1,5 @@
 package cache;
 
-import java.util.Hashtable;
-
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +15,7 @@ public class PageVars extends ObjectBuilder{
 			page.getSession().setAttribute("_page_vars", temp);
 		}else{
 			if(!StringUtils.equals(temp.pageClass, page.getPage().getClass().getCanonicalName())){
-				temp.table = new Hashtable<String, Object>();
+				temp.table.clearAll();
 				temp.pageClass = page.getPage().getClass().getCanonicalName();
 			}
 		}
@@ -25,6 +23,6 @@ public class PageVars extends ObjectBuilder{
 	}
 	
 	public void clearVars(){
-		this.table = new Hashtable<String, Object>();
+		this.table.clearAll();
 	}
 }
