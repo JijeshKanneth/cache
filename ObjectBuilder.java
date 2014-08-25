@@ -3,13 +3,16 @@ package cache;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Hashtable;
 
 import org.apache.commons.lang.StringUtils;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ObjectBuilder {
-	protected Hashtable<String, Object> table = new Hashtable<String, Object>();
+	protected ICachManager table = new SimpleCache();
+	
+	public void setCacheManager(ICachManager manager){
+		table = manager;
+	}
 	
 	public Object getInstanceOf(Class className){
 		Object [] nullArray = null;
