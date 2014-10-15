@@ -53,7 +53,7 @@ public class ObjectBuilder {
 	}	
 	
 	public Object call(Object obj, String methodName){
-		return rw.invoke(obj, methodName);
+		return call(obj, methodName, null);
 	}
 	
 	public Object call(Object obj,String methodName, Object [] params){
@@ -62,7 +62,11 @@ public class ObjectBuilder {
 		String methodID = getMethodID(className, methodName, params);
 		Object object = table.get(methodID);
 		if(null == object){
-			object = rw.invoke(obj, methodName, params);
+			if(null == params){
+				object = rw.invoke(obj, methodName);
+			}else{
+				object = rw.invoke(obj, methodName, params);
+			}
 			if(null != object) table.put(methodID, object);
 		}
 		return object;
