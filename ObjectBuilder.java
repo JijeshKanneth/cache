@@ -12,7 +12,7 @@ public class ObjectBuilder {
 	}
 	
 	public Object getInstanceOf(Class className){
-		return rw.newInstance(className);
+		return getInstanceOf(className, null);
 	}
 	
 	public Object getInstanceOf(Class className, Object [] params){
